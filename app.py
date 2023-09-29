@@ -17,12 +17,24 @@ def constraint_problem(variables, values):
     return sum1 + sum2 == sum3
 
 # Streamlit code
-st.title('Cryptarithmetic Puzzle Solver')
+st.set_page_config(page_title='Cryptarithmetic Puzzle Solver', page_icon="🧩", layout='wide', initial_sidebar_state='auto')
 
-# Get user input
-word1 = st.text_input("Enter the first word: ").upper()
-word2 = st.text_input("Enter the second word: ").upper()
-word3 = st.text_input("Enter the third word: ").upper()
+
+st.title('Cryptarithmetic Puzzle Solver 🧩')
+
+# Create columns for input and output
+input_col, output_col = st.columns(2)
+
+with input_col:
+    st.markdown("""
+    Enter each word in the puzzle. Each letter represents a unique digit. 
+    The goal is to find a substitution of digits into letters that makes the equation true.
+    """)
+
+    # Get user input
+    word1 = st.text_input("Enter the first word: ").upper()
+    word2 = st.text_input("Enter the second word: ").upper()
+    word3 = st.text_input("Enter the third word: ").upper()
 
 if st.button('Solve'):
     # Define the variables
@@ -42,4 +54,21 @@ if st.button('Solve'):
     # Solve the problem
     solution = backtrack(problem)
     
-    st.write(solution)
+    with output_col:
+        if solution is not None:
+            # Format and print the solution
+            word1_solution = ''.join(str(solution[letter]) for letter in word1)
+            word2_solution = ''.join(str(solution[letter]) for letter in word2)
+            word3_solution = ''.join(str(solution[letter]) for letter in word3)
+            
+            st.markdown(f"## Solution 💡")
+            st.markdown(f"**{word1}** becomes **{word1_solution}**")
+            st.markdown(f"**{word2}** becomes **{word2_solution}**")
+            st.markdown(f"**{word3}** becomes **{word3_solution}**")
+            
+            st.markdown(f"**{word1}**` `+` `**{word2}**` `=` `**{word3}**")
+            st.markdown(f"**{word1_solution}**` `+` `**{word2_solution}**` `=` `**{word3_solution}**")
+
+            
+        else:
+            st.markdown("## No Solution 💔")
